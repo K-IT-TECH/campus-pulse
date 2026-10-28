@@ -2,9 +2,11 @@
 
 # CampusPulse
 
+[**Open live app →**](https://k-it-tech.github.io/campus-pulse/)
+
 A club event desk with capacity tracking and a personal shortlist.
 
-**Status:** Working local-first web app. Responsive, dependency-free, and ready for GitHub Pages. No backend or account system.
+**Status:** Working local-first web app. Responsive, dependency-free, and published on GitHub Pages. No backend or account system.
 
 ## Why build it?
 
@@ -20,7 +22,6 @@ Use your club experience to design a tool that solves a familiar problem.
 - Create and delete local events with capacity and schedule validation.
 - Save events and register or cancel a single local demo seat.
 - Keep changes in this browser between visits.
-
 - Download and restore versioned JSON backups, with validation before replacement.
 - Use the app offline after the first successful online visit (HTTPS or localhost).
 - Export events to a calendar file with a one-hour placeholder duration.
@@ -78,7 +79,7 @@ For future releases, update the cache version in `sw.js` when changing the offli
 
 Registration reserves one seat only in the current browser. It does not send a ticket, notify an organizer, verify identity or coordinate shared capacity. Seeded booking counts are fictional. Editing events, real QR tickets and a shared backend are future work.
 
-Sample data is fictional. Changes stay in `localStorage` in this browser, are not encrypted, and do not sync across devices. Clearing browser data removes them. Multiple tabs do not coordinate edits. Use **Your data → Download backup** to export a version 1 JSON snapshot, then choose that file under **Restore** on another device. Restore validates the app name, version, fields, ranges and record references, previews the record count, and asks before replacing local data. Back up your current data first. Focus timers restore paused. Files larger than 2 MB are rejected. **Reset demo** replaces the saved data after confirmation. Browser data is separate from the source files you upload to GitHub.
+Sample data is fictional. Changes stay in `localStorage` in this browser, are not encrypted, and do not sync across devices. Clearing browser data removes them. Multiple tabs do not coordinate edits. Use **Your data → Download backup** to export a version 1 JSON snapshot, then choose that file under **Restore** on another device. Restore validates the app name, version, fields, ranges and record references, previews the record count, and asks before replacing local data. Back up your current data first. Files larger than 2 MB are rejected. **Reset demo** replaces the saved data after confirmation. Browser data is separate from the source files you upload to GitHub.
 
 ## Next steps
 
