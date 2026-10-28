@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "CampusPulse",
+  "short_name": "CampusPulse",
+  "description": "A club event desk with capacity tracking and a personal shortlist.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f4fa",
+  "theme_color": "#f6f4fa",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
