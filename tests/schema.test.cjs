@@ -1,0 +1,10 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
+const app=fs.readFileSync('app.js','utf8'),schema=fs.readFileSync('schema.js','utf8');
+const context={UI:{escape:String,today:()=> '2026-11-01',after:()=> '2026-11-02'},URL,structuredClone};
+vm.createContext(context);vm.runInContext(schema+'\n'+app.slice(0,app.indexOf('let state'))+'\nthis.seedData=seed;this.check=DataSchema.valid;',context);
+const slug='campus-pulse';const fresh=()=>structuredClone(context.seedData);
+test('current demo state is accepted',()=>assert.equal(context.check(slug,fresh()),true));
+test('null and missing records are rejected',()=>{for(const bad of [null,{},[],{events:[null]}])assert.equal(context.check(slug,bad),false);});
+test('malformed nested fields are rejected before rendering',()=>{const d=fresh();d.events[0].title=null;assert.equal(context.check(slug,d),false);});
+test('duplicate record IDs are rejected',()=>{const d=fresh();const list=Object.values(d).find(Array.isArray);if(list.length){list.push(structuredClone(list[0]));assert.equal(context.check(slug,d),false);}});
+test('UI.load recovers malformed stored data without overwriting it',()=>{const d=fresh();d.events[0].title=null;const raw=JSON.stringify(d);let writes=0;const c={URL,structuredClone,setTimeout:()=>0,clearTimeout:()=>{},document:{addEventListener:()=>{}},localStorage:{getItem:()=>raw,setItem:()=>writes++}};vm.createContext(c);vm.runInContext(fs.readFileSync('common.js','utf8')+'\nthis.load=UI.load;',c);const loaded=c.load('test',fresh(),value=>context.check(slug,value));assert.equal(context.check(slug,loaded),true);assert.equal(writes,0);});
