@@ -32,3 +32,7 @@ This is a focused starter-app check, not a complete browser-compatibility or acc
 - Offline reload after service worker activation; cache isolation between apps.
 - Desktop and narrow mobile layouts after adding data controls.
 - CampusPulse calendar file formatting and escaping.
+
+## Storage recovery and offline refresh
+
+Run `node --test tests/schema.test.cjs`. Startup now validates complete nested records with the same schema used by backup imports. Invalid storage falls back to demo data without overwriting the original stored value. Focus timers may resume on startup; imported backups must stay paused. The v2 worker precaches the shared schema and refreshes the cached HTML after a successful root/index navigation.
