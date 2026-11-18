@@ -13,7 +13,30 @@ const UI = (() => {
   function save(key,data) { try { localStorage.setItem(key,JSON.stringify(data)); return true; } catch { toast('This browser could not save. Your changes last only while this page stays open.'); return false; } }
   function download(name,text,type='application/json') { const blob=new Blob([text],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000); }
   function exportJSON(name,data) { download(name,JSON.stringify(data,null,2)); }
-  async function copy(text) { try { if(!navigator.clipboard)throw Error('Unavailable');await navigator.clipboard.writeText(text);toast('Copied to clipboard.'); } catch { const area=document.createElement('textarea');area.value=text;document.body.append(area);area.select();const ok=document.execCommand('copy');area.remove();toast(ok?'Copied to clipboard.':'Clipboard unavailable. Select the code and copy manually.'); } }
+  async function copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast('Copied to clipboard.');
+      return;
+    } catch {
+      // Some browsers only permit the older copy command.
+    }
+    const area = document.createElement('textarea');
+    const previousFocus = document.activeElement;
+    area.value = text;
+    document.body.append(area);
+    let copied = false;
+    try {
+      area.select();
+      copied = document.execCommand?.('copy') === true;
+    } catch {
+      // Clipboard access can also be denied here.
+    } finally {
+      area.remove();
+      previousFocus?.focus?.();
+    }
+    toast(copied ? 'Copied to clipboard.' : 'Clipboard unavailable. Select the text and copy manually.');
+  }
   function shell(meta,subtitle,number) { document.title=meta.name+' — '+meta.tag;document.body.innerHTML=`<a href="#main" class="skip">Skip to content</a><header><div class="wrap nav"><a class="brand" href="./index.html"><span class="brand-mark" aria-hidden="true">${meta.symbol}</span>${meta.name}</a><div class="nav-note"><span class="dot"></span>Local-first · your browser</div></div></header><main id="main" class="wrap"><section class="hero"><div><div class="eyebrow">${subtitle}</div><h1>${meta.tag}</h1><p>${meta.short}</p></div><div class="hero-number" aria-hidden="true">${number}</div></section><div id="app"></div></main><footer><div class="wrap footer-inner"><span>${meta.name} / Fictional starting data. Your changes stay in this browser.</span><button type="button" id="reset-demo">Reset demo</button></div></footer><div id="toast" role="status" aria-live="polite"></div>`; }
   function dialog(id,title,content) { return `<dialog id="${id}" aria-labelledby="${id}-title"><div class="dialog-head"><h2 id="${id}-title">${title}</h2><button type="button" class="icon-btn" aria-label="Close dialog" data-close="${id}">×</button></div>${content}</dialog>`; }
   document.addEventListener('click',event=>{const close=event.target.closest('[data-close]');if(close)document.getElementById(close.dataset.close).close();});
